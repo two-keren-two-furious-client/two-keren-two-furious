@@ -26,7 +26,6 @@
         </div>
       </div>
     </div>      
-    <button @click="test">test</button>
 
 </div>
   
@@ -77,50 +76,20 @@
     name: "health-bar",
     props:['player1','player2'],
     data (){
-      return {
-        ammoP1:10,
-        hpP1:10,
-        ammoP2:10,
-        hpP2:10
-        }
+   
     },
     mounted() {
       this.reloadShootBar();
-
     },
- 
     methods: {
-      test() {
-        this.ammoP1=3;
-        this.hpP1=3;
-      },
-        // drawHealthBar (health) {
-        //   let bar=this.$refs.healthbar;
-        //   console.log('xx',health)
-        //   var ctx = bar.getContext("2d");
-        //   // Create gradient
-        //   var grd = ctx.createLinearGradient(0, 0, 500, 0);
-        //   grd.addColorStop(0, "red");
-        //   grd.addColorStop(1, "white");
-
-        //   // Fill with gradient
-        //   ctx.fillStyle = grd;
-        //   ctx.fillRect(10, 10, health, 80);
-        // },
         reloadShootBar() {
           setTimeout(()=> {
             setInterval(() => {
-                if(this.ammoP1<10) this.ammoP1++;
-                if(this.ammoP2<10) this.ammoP1++;
+              console.log('hello', this.player1.amo)
+                if(this.player1.amo < 100) this.player2.amo+=50;
+                if(this.player2.amo < 100) this.player2.amo+=50;
             }, 2000)
           }, 1000);
-        },
-        
-        shoot(){
-          //reduce ammo ammo --5
-          
-          //if hit reduce hp target --5
-          
         }
     }
   }
