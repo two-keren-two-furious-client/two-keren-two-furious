@@ -20,7 +20,7 @@
                 <div class="btn btn-dark" :class="{disabled: mytoken !== p2.id}" v-else @click="statusChanger('p2')">Cancel ready</div>
             </div>
         </div>
-        
+        <div class="btn btn-dark" @click="startGame">Start Game</div>
         <div class="btn btn-dark" @click="exitRoom">Exit Room</div>
     </div>
 
@@ -52,9 +52,17 @@ export default {
             if (!this.p1) {
                 this.closeRoom()
             }
+        },
+        roomStatus() {
+            if (this.roomStatus === 'onGame') {
+                this.$router.push('gameboard')
+            }
         }
     },
     methods: {
+        startGame(){
+            db.ref(`/db/rooms/` + this.roomId + `/status`).set(`onGame`)
+        },
         roomInit(){
             let token = localStorage.getItem('token')
             let name = localStorage.getItem('name')
@@ -84,9 +92,7 @@ export default {
 
             db.ref(`/db/rooms/` + roomId + `/status`).on('value', snapshot => {
                 this.roomStatus = snapshot.val()
-            })
-            console.log(this.p1);
-            
+            })            
         },
         statusChanger(target){
             let val = ''
@@ -101,9 +107,11 @@ export default {
             let token = localStorage.getItem('token')
             let roomId = localStorage.getItem('roomId')
             db.ref(`/db/rooms/` + roomId + `/player`).on('value', snapshot => {
+                console.log(snapshot.val());
+                
                 for (let i = 0; i < Object.keys(snapshot.val()).length; i++) {
-                    if (Object.values(snapshot.val())[i].id == token) {
-                        if (Object.keys(snapshot.val())[i] == 'p1') {
+                    if (Object.values(snapshot.val())[i].id === token) {
+                        if (Object.keys(snapshot.val())[i] === 'p1') {
                             localStorage.removeItem('roomId')
                             db.ref(`/db/rooms/` + roomId).remove()
                             this.roomInit()
