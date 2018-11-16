@@ -79,18 +79,10 @@
    
     },
     mounted() {
-      this.reloadShootBar();
+      // this.reloadShootBar();
     },
     methods: {
-        reloadShootBar() {
-          setTimeout(()=> {
-            setInterval(() => {
-              console.log('hello', this.player1.amo)
-                if(this.player1.amo < 100) this.player2.amo+=50;
-                if(this.player2.amo < 100) this.player2.amo+=50;
-            }, 2000)
-          }, 1000);
-        }
+    
     }
   }
 </script>
