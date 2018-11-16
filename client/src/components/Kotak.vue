@@ -1,15 +1,15 @@
 <template>
     <div class="kotak">
         <div v-if="player" class="mt-3">
-            <img v-if="player.type == 'genk' && player.direction == 'up'" src="@/assets/police-up.png" alt="" style="height:90px; width:50px">
-            <img v-if="player.type == 'genk' && player.direction == 'down'" src="@/assets/police-down.png" alt="" style="height:90px; width:50px">
-            <img v-if="player.type == 'genk' && player.direction == 'right'" src="@/assets/police-right.png" alt="" style="height:50px; width:90px">
-            <img v-if="player.type == 'genk' && player.direction == 'left'" src="@/assets/police-left.png" alt="" style="height:50px; width:90px">
+            <img v-if="player.type == 'genk' && player.direction == 'up'" src="@/assets/police-up.png" alt="" style="height:50px; width:35px">
+            <img v-if="player.type == 'genk' && player.direction == 'down'" src="@/assets/police-down.png" alt="" style="height:50px; width:35px">
+            <img v-if="player.type == 'genk' && player.direction == 'right'" src="@/assets/police-right.png" alt="" style="height:35px; width:50px">
+            <img v-if="player.type == 'genk' && player.direction == 'left'" src="@/assets/police-left.png" alt="" style="height:35px; width:50px">
 
-            <img v-if="player.type == 'police' && player.direction == 'up'" src="@/assets/yellow-up.png" alt="" style="height:90px; width:50px">
-            <img v-if="player.type == 'police' && player.direction == 'down'" src="@/assets/yellow-down.png" alt="" style="height:90px; width:50px">
-            <img v-if="player.type == 'police' && player.direction == 'right'" src="@/assets/yellow-right.png" alt="" style="height:50px; width:90px">
-            <img v-if="player.type == 'police' && player.direction == 'left'" src="@/assets/yellow-left.png" alt="" style="height:50px; width:90px">
+            <img v-if="player.type == 'police' && player.direction == 'up'" src="@/assets/yellow-up.png" alt="" style="height:50px; width:35px">
+            <img v-if="player.type == 'police' && player.direction == 'down'" src="@/assets/yellow-down.png" alt="" style="height:50px; width:35px">
+            <img v-if="player.type == 'police' && player.direction == 'right'" src="@/assets/yellow-right.png" alt="" style="height:35px; width:50px">
+            <img v-if="player.type == 'police' && player.direction == 'left'" src="@/assets/yellow-left.png" alt="" style="height:35px; width:50px">
 
             <!-- <img src="@/assets/tank.jpg" alt="" style="height:90px; width:90px"> -->
         </div>
@@ -51,8 +51,8 @@ export default {
 
 <style>
     .kotak{
-        height: 90px;
-        width: 100px;
+        height: 50px;
+        width: 50px;
         /* border: 1px solid black; */
         box-sizing: border-box;
         margin: auto
