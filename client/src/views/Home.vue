@@ -1,5 +1,6 @@
 <template>
-  <div class="container mt-5">
+    <div id="home">
+    <div class="container mt-5">
     <div class="d-flex mt-5 justify-content-center">
       <div class="card mt-5">
         <div class="card-header bg-secondary">
@@ -17,6 +18,8 @@
     </div>     
     </div>
   </div>
+</div>
+
 </template>
 
 <script>
@@ -58,3 +61,14 @@ export default {
   }
 }
 </script>
+
+<style>
+  /* #home{
+    background-image: url('../assets/bg-home.jpg');
+   background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+    background-color: aqua
+  } */
+</style>
+
