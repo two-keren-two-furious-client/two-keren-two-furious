@@ -5,9 +5,19 @@
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
+    <health-bar/>
+    xxxx
   </div>
 </template>
-
+<script>
+  import healthBarComponent from './components/healthBar.vue'
+  export default {
+    name: 'App',
+    components: {
+    'health-bar': healthBarComponent
+    }
+  }
+</script>
 <style>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
