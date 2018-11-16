@@ -1,14 +1,14 @@
 <template>
 <div class="container">
   <div class="row healthrow">
-    <div class="player1">
-      <h2>Player 1</h2>
+    <div class="player1 mt-4 mb-4">
+      <h2 style="color: #fff">Player 1</h2>
       <div class="healthbars">
        hp <canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in player1.hp/10"></canvas> {{player1.hp}}
       </div>    
     </div>
     <div class="player2">
-      <h2>Player 2</h2>
+      <h2 style="color: #fff">Player 2</h2>
       <div class="healthbars">
         {{player2.hp}}<canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in player2.hp/10"></canvas> hp
       </div>    
