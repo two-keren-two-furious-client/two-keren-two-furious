@@ -30,7 +30,7 @@
                    </div>   
             </div>     
         <div class="btn btn-info" @click="startGame">Start Game</div>
-        <div class="btn btn-danger ml-4" @click="exitRoom">Exit Room</div>
+        <div class="btn btn-danger11 ml-4" @click="exitRoom">Exit Room</div>
     </div>
 
 </template>
