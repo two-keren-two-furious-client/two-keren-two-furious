@@ -45,21 +45,21 @@
   }
   .shootbar{
     height:30px;
-    width: 40px;
+    max-width: 40px;
     background-color:rgb(238, 107, 20);
     margin: 0 1px;
     border: none;
     flex: none;
   }
   .shootbars {
-    width:200px;
+    width:auto;
     justify-content: flex-start;
     display:flex;
     margin: 10px 0;
   }
  
   .healthbars {
-    width:460px;
+    width:auto;
     justify-content: flex-start;
     display:flex;
   }
