@@ -70,12 +70,5 @@ export default {
     height: 100%;
     background-color: aqua
   } */
-
-    #home{
-    background-image: url('../assets/bg-home.jpg');
-   background-repeat: no-repeat;
-  
-    height: 100vh;
-  }
 </style>
 

@@ -28,4 +28,14 @@
 /* #nav a.router-link-exact-active {
   color: #42b983;
 } */
+
+    #app{
+        background-image: url('../assets/bg-home.jpg');
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+      width: 100vw;  
+        height: 100vh;
+  }
 </style>
