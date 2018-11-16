@@ -1,12 +1,12 @@
 <template>
   <div class="container" id="game">
-    <health-bar-component :player1="players[0]" :player2="players[1]"/>
+    <!-- <health-bar-component :player1="players[0]" :player2="players[1]"/> -->
 
-    <div id="boardcontainer" style="background-image: url('https://ubisafe.org/images/asphaltus-clipart-blacktop-1.jpg');">
-        <div v-if="show" v-for="tile in tiles" :key="tile">
+    <div id="boardcontainer" style="background-image: url('https://00e9e64bac0c01098c4ee85ae1225b4a2ca7e03cf01a1f86ef-apidata.googleusercontent.com/download/storage/v1/b/e-commerce-storage/o/asphalt.png?qk=AD5uMEtjtL8p9V1xglLca3gdkBCMp_wAu-OwteXeS2Dhi3mCe93R5bsEQZYFdCfc7_mha-HI1bqJFPuyDvsfjzBIaooQlga9OUsltZqIGxd4ECRcJ_qMO_xGyK_vrJS38X4-AMVE1FbKaIRzZOvJb6SpE_9pysuS493tdLmepQqhJtFFlnebIlZuMJc6UifNot-rPpt6E8FXyqcfl-a3DsHd1jjJerkomgVREJwbLx0EZ0OHytBZ8N5i8U7w9eFFgG1WCXV4h0bemhpU9CtSvJauY-hjwyRH2JVDxo5HQFdI8bQmtRhieZzNxuxbpZUzHh46OJwa0bEyu3diNCZIaonklHu07qpNllzpa7yvCcmstXwQ9Aq5x2NBW7cyyQ3o9YIAdA71QVnsCL2pbNCFs-ETY3LH9rdzWqTT_xek9FgwWPOlU1netwLRKSQbBDcAHY7Nbc5E8A4CfqpJy7xOtNTwL4yiJIRTCmnyBG5NNATlITYErk6f5MB95NJRV9HqKVIHVvbRbDXsJwu2DzrRNPfzqgJY6E1e3SIUKFC7RqZdTfwHF2bqu_mAhKvhJNrxlHuygatqOoL0c4rfJhQT63NpLSQNgZMjelZ4E1FyokR-kzNtdMa69bckYHrWr0pm-cLYo-_rZlxtvgceo8eoPgIFtuTR2KhSgS6BXIL2JUMzoVi5QyyVEvBE0usUM6iqG2vJTeHkQTppDhVirEP36LZ5uGRy3Tmffq4lgmfGIpZRjPrh81LAuRZLHKRHHunG_wJDDfPFRgSO');">
+        <div v-if="show && !dead" v-for="tile in tiles" :key="tile">
             <kotak :tile="tile" :players="players" :myPlayerNumber="myPlayerNumber"></kotak>
         </div>
-
+        <h1 v-if="dead"> WINNER IS... {{winner}}!!</h1>
     </div>
   </div>
 </template>
@@ -40,6 +40,8 @@ export default {
             myPlayerNumber: '',
             players: [],
             show: true,
+            dead:false,
+            winner:''
         }
     },
     created(){
@@ -90,12 +92,17 @@ export default {
               }
             })
           } else if(event.keyCode == 32){
+              event.preventDefault();
+
                   //get Current Player positions from DB
                   db.ref(`/db/rooms/` + roomId + `/player`).once('value', snapshot => {
-                    //if no ammo
-                    if(snapshot.val()[attackerId].amo !== 0) {
 
+                    //if no ammo
+                    if(snapshot.val()[self.myPlayerNumber].amo !== 0) {
+                      console.log('heloo')
                       let attackerId= self.myPlayerNumber;
+                      this.reloadShootBar(roomId, attackerId);
+                      
                       let targetId;
                       if(attackerId=='p1') {targetId='p2';}
                       if (attackerId=='p2') {targetId='p1'};
@@ -103,20 +110,26 @@ export default {
                       let attackPosition=snapshot.val()[attackerId].position;
                       let targetPosition=snapshot.val()[targetId].position;
                       
-                      let attackRow=Math.floor(attackPosition/10);
+                      let attackRow=Math.ceil(attackPosition/10);
                       let attackCol=attackPosition%10;
 
-                      let targetRow=Math.floor(targetPosition/10);
+
+                      let targetRow=Math.ceil(targetPosition/10);
                       let targetCol=targetPosition%10;
                       
+                      if(targetCol==0) targetCol=10;
+                      if(attackCol==0) attackCol=10;
+
                       let attackDirection=snapshot.val()[attackerId].direction;
                       let hit=false;
 
                       //check if target is in attacker line of fire
                       let attackerAmo=snapshot.val()[attackerId].amo;
                       let targetHp=snapshot.val()[targetId].hp;
-                      console.log(targetRow,attackRow,attackCol,targetCol,attackDirection)
+                      console.log('targetrow',targetRow,'attackrow',attackRow);
+                      console.log('attackCol',attackCol,'targetCol',targetCol,attackDirection)
                       if(attackRow ==targetRow) {
+                        console.log('same row')
                         if(attackDirection=='left'){
                           if(attackCol > targetCol) hit=true;
                         }
@@ -125,6 +138,7 @@ export default {
                         }
                       }
                       if(attackCol == targetCol){
+                        console.log('same col')
                         if(attackDirection =='up'){
                           if(attackRow > targetRow) hit=true;
                         }
@@ -135,15 +149,19 @@ export default {
                     //update firebase daata
                       if(hit == true){
                         console.log('hit!!!!!!!!!!!')
-                      //if no ammo, cannot hit
-                      db.ref(`/db/rooms/` + roomId + `/player/` + targetId + '/hp').set(targethp-50)
+                        //if no ammo, cannot hit
+                        db.ref(`/db/rooms/` + roomId + `/player/` + targetId + '/hp').set(targetHp-50);
+                        this.isDead(this.players)
                       }
-                      db.ref(`/db/rooms/` + roomId + `/player/` + attackerId + '/amo').set(attackerAmo-50)
+                      console.log('attacker.........',attackerAmo)
+
+                      db.ref(`/db/rooms/` + roomId + `/player/` + attackerId + '/amo').set(attackerAmo-50);
+
                     }
                   })
                 }
         })
-      this.shoot()
+        
     },
     watch: {
         players(){
@@ -151,6 +169,35 @@ export default {
         }
     },
     methods: {
+        isDead(target) {
+          let self=this;
+          target.forEach(player => { 
+            if(player.hp==0) {
+              self.dead=true;
+              self.winner=player.name;
+            }
+
+          })
+        },
+        reloadShootBar(roomId, attackerId) {
+          if(this.myPlayerNumber=='p1'){
+             setTimeout(()=> {
+             setInterval(() => {
+              if(this.players[0].amo<100){
+                db.ref(`/db/rooms/` + roomId + `/player/` + attackerId + '/amo').set(this.players[0].amo+50);
+              }
+              }, 4000)
+            }, 1000);
+          } else {
+             setTimeout(()=> {
+             setInterval(() => {
+              if(this.players[1].amo<100){
+                db.ref(`/db/rooms/` + roomId + `/player/` + attackerId + '/amo').set(this.players[1].amo+50);
+              }
+              }, 4000)
+            }, 1000);
+          }
+        },
         initGame(){
             let token = localStorage.getItem('token')
             let roomId = localStorage.getItem('roomId')
@@ -179,7 +226,6 @@ export default {
                     this.players = Object.values(snapshot.val())
                 })
             })
-        
         },
         updateBoard(){
             this.show = false
