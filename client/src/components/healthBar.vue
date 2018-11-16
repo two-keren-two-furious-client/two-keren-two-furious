@@ -4,25 +4,25 @@
     <div class="player1">
       <h2>Player 1</h2>
       <div class="healthbars">
-        <canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in hpP1"></canvas> {{hpP1*100}}
+       hp <canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in player1.hp/10"></canvas> {{player1.hp}}
       </div>    
     </div>
     <div class="player2">
       <h2>Player 2</h2>
       <div class="healthbars">
-        {{hpP2*100}}<canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in hpP2"></canvas>
+        {{player2.hp}}<canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in player2.hp/10"></canvas> hp
       </div>    
     </div>
   </div>
     <div class="shootrow row">
       <div class="player1">  
         <div class="shootbars">
-          <canvas class=" bar shootbar col-2" ref="shootbar" v-for="n in ammoP1"></canvas>
+          ammo<canvas class=" bar shootbar col-2" ref="shootbar" v-for="n in player1.amo/10"></canvas>
         </div>
       </div>
       <div class="player2">
         <div class="shootbars">
-          <canvas class=" bar shootbar col-2" ref="shootbar" v-for="n in ammoP2"></canvas>
+          <canvas class=" bar shootbar col-2" ref="shootbar" v-for="n in player2.amo/10"></canvas>ammo
         </div>
       </div>
     </div>      
@@ -75,6 +75,7 @@
 <script>
   export default {
     name: "health-bar",
+    props:['player1','player2'],
     data (){
       return {
         ammoP1:10,

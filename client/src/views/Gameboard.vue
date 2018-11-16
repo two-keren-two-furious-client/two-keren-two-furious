@@ -1,22 +1,26 @@
 <template>
-    <div class="container" id="boardcontainer">
+  <div class="container" id="game">
+    <health-bar-component :player1="players[0]" :player2="players[1]"/>
+    <div id="boardcontainer">
         <div v-if="show" v-for="tile in tiles" :key="tile">
             <kotak :tile="tile" :players="players" :myPlayerNumber="myPlayerNumber"></kotak>
         </div>
         <div ></div>
     </div>
+  </div>
 </template>
 
 <script>
 import firebaseApp from '@/assets/config.js'
 import kotak from '../components/Kotak.vue'
+import healthBarComponent from '../components/healthBar.vue'
 
 const db = firebaseApp.database() 
 
 export default {
     name: 'gameboard',
     components: {
-        kotak
+        kotak, healthBarComponent
     },
     data(){
         return{
@@ -34,7 +38,7 @@ export default {
                 ],
             myPlayerNumber: '',
             players: [],
-            show: true
+            show: true,
         }
     },
     created(){
@@ -83,6 +87,7 @@ export default {
             console.log("fire")
           }
         })
+      this.shoot()
     },
     watch: {
         players(){
@@ -116,7 +121,6 @@ export default {
                 db.ref(`/db/rooms/` + roomId + `/player`).on('value', snapshot => {
                     // console.log(Object.values(snapshot.val()));
                     this.players = Object.values(snapshot.val())
-                    // console.log(this.players);
                 })
             })
         
@@ -129,7 +133,58 @@ export default {
             // console.log('test')
         },
         updatePlayerPosition(){
-          
+        },
+     shoot() {
+          //listen to key 
+          window.addEventListener("keyup", ev=>{
+            console.log('roomid')
+            let token = localStorage.getItem('token')
+            let roomId = localStorage.getItem('roomId')
+            if(ev.keyCode===32) {
+              //update firebase daata
+              let targetId;
+              let attackerId=this.myPlayerNumber;
+              console.log('attackerid',attackerId)
+              if(attackerId=='p1') targetId='p2';
+              else if (attackerId=='p2') targetId='p1';
+              db.ref(`/db/rooms/` + roomId + `/player`).once('value', snapshot => {
+                console.log('snapshot',snapshot.val())
+                let attackPosition=snapshot.val().attackerId.position;
+                let targetPosition=snapshot.val().targetId.position;
+                
+                let attackRow=Math.floor(attackPosition/10);
+                let attackCol=attackPosition%10;
+
+                let targetRow=Math.floor(targetPosition/10);
+                let targetCol=targetPosition%10;
+                
+                let attackDirection=snapshot.val().attackerId.direction;
+                let hit=false;
+                //check if target is in attacker line of fire
+
+                if(attackRow==targetRow) {
+                  if(attackDirection=='left'){
+                    if(attackCol>targetCol) hit=true;
+                  }
+                  else if (attackDirection=='right'){
+                    if(attackCol<targetCol) hit=true;
+                  }
+                }
+                if(attackCol==targetCol){
+                   if(attackDirection=='up'){
+                    if(attackRow>targetRow) hit=true;
+                  }
+                  else if (attackDirection=='down'){
+                    if(attackRow<targetRow) hit=true;
+                  }
+                } 
+                if(hit==true){
+                 db.ref(`/db/rooms/` + roomId + `/player/` + targetId + '/hp').set(50)
+                }
+                db.ref(`/db/rooms/` + roomId + `/player/` + attackerId + '/amo').set(50)
+              })
+            }
+          })
         }
     }
 }
