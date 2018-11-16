@@ -77,12 +77,6 @@
     props:['player1','player2'],
     data (){
    
-    },
-    mounted() {
-      // this.reloadShootBar();
-    },
-    methods: {
-    
     }
   }
 </script>
