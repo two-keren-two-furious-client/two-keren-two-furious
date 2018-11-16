@@ -1,20 +1,16 @@
 <template>
   <div class="container" id="game">
     <health-bar-component :player1="players[0]" :player2="players[1]"/>
-<<<<<<< HEAD
+
+
      <div style="font-size: 50px" v-if="dead" class="mt-5 alert alert-block alert-info" role="alert">
           WINNER IS... {{winner}}!!
         </div>
     <div id="boardcontainer" style="background-image: url('https://ubisafe.org/images/asphaltus-clipart-blacktop-1.jpg');">
-=======
-
-    <div id="boardcontainer" style="background-image: url('https://00e9e64bac0c01098c4ee85ae1225b4a2ca7e03cf01a1f86ef-apidata.googleusercontent.com/download/storage/v1/b/e-commerce-storage/o/asphalt.png?qk=AD5uMEtjtL8p9V1xglLca3gdkBCMp_wAu-OwteXeS2Dhi3mCe93R5bsEQZYFdCfc7_mha-HI1bqJFPuyDvsfjzBIaooQlga9OUsltZqIGxd4ECRcJ_qMO_xGyK_vrJS38X4-AMVE1FbKaIRzZOvJb6SpE_9pysuS493tdLmepQqhJtFFlnebIlZuMJc6UifNot-rPpt6E8FXyqcfl-a3DsHd1jjJerkomgVREJwbLx0EZ0OHytBZ8N5i8U7w9eFFgG1WCXV4h0bemhpU9CtSvJauY-hjwyRH2JVDxo5HQFdI8bQmtRhieZzNxuxbpZUzHh46OJwa0bEyu3diNCZIaonklHu07qpNllzpa7yvCcmstXwQ9Aq5x2NBW7cyyQ3o9YIAdA71QVnsCL2pbNCFs-ETY3LH9rdzWqTT_xek9FgwWPOlU1netwLRKSQbBDcAHY7Nbc5E8A4CfqpJy7xOtNTwL4yiJIRTCmnyBG5NNATlITYErk6f5MB95NJRV9HqKVIHVvbRbDXsJwu2DzrRNPfzqgJY6E1e3SIUKFC7RqZdTfwHF2bqu_mAhKvhJNrxlHuygatqOoL0c4rfJhQT63NpLSQNgZMjelZ4E1FyokR-kzNtdMa69bckYHrWr0pm-cLYo-_rZlxtvgceo8eoPgIFtuTR2KhSgS6BXIL2JUMzoVi5QyyVEvBE0usUM6iqG2vJTeHkQTppDhVirEP36LZ5uGRy3Tmffq4lgmfGIpZRjPrh81LAuRZLHKRHHunG_wJDDfPFRgSO');">
->>>>>>> fix autoreload
         <div v-if="show && !dead" v-for="tile in tiles" :key="tile">
             <kotak :tile="tile" :players="players" :myPlayerNumber="myPlayerNumber"></kotak>
         </div>
         <!-- <h1></h1> -->
-       
     </div>
   </div>
 </template>
@@ -111,6 +107,7 @@ export default {
                     //if no ammo
                     if(snapshot.val()[self.myPlayerNumber].amo !== 0) {
                       console.log('heloo')
+                      this.soundShoot()
                       let attackerId= self.myPlayerNumber;
                       
                       let targetId;
@@ -159,6 +156,7 @@ export default {
                     //update firebase daata
                       if(hit == true){
                         console.log('hit!!!!!!!!!!!')
+                        this.shootTarget()
                         //if no ammo, cannot hit
                         db.ref(`/db/rooms/` + roomId + `/player/` + targetId + '/hp').set(targetHp-50);
                       }
@@ -179,6 +177,14 @@ export default {
         }
     },
     methods: {
+      soundShoot(){
+        let audioShoot = new Audio(require('../assets/shot2.wav'))
+        audioShoot.play()
+      },
+      shootTarget(){
+        let audioShoot = new Audio(require('../assets/shot.wav'))  
+        audioShoot.play()
+      },
         isDead(target) {
           console.log('---',target)
           let self=this;
