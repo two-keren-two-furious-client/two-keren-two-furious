@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Lobby from './views/Lobby.vue'
 import Room from './views/Room.vue'
+import Gameboard from './views/Gameboard.vue'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/room',
       name: 'room',
       component: Room
+    },
+    {
+      path: '/gameboard',
+      name: 'gameboard',
+      component: Gameboard
     }
   ]
 })
