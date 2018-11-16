@@ -1,7 +1,7 @@
 <template>
     <div class="container" id="boardcontainer">
         <div v-if="show" v-for="tile in tiles" :key="tile">
-            <kotak :tile="tile" :players="players" ></kotak>
+            <kotak :tile="tile" :players="players" :myPlayerNumber="myPlayerNumber"></kotak>
         </div>
         <div ></div>
     </div>
@@ -21,7 +21,7 @@ export default {
     data(){
         return{
             tiles: [
-                1, 2, 3, 4, 5,6,7,8,9, 10,
+                1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
                 11, 12, 13, 14, 15, 16, 17,18, 19, 20,
                 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
                 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
@@ -99,14 +99,17 @@ export default {
                 } else if (token === snapshot.val().p2.id) {
                     this.myPlayerNumber = 'p2'
                 }
-                console.log('ini harusnya duluan', this.myPlayerNumber)
-
+                
                 db.ref(`/db/rooms/` + roomId + `/player/` + 'p1' + '/position').set(1)
+                db.ref(`/db/rooms/` + roomId + `/player/` + 'p1' + '/direction').set('right')
+                db.ref(`/db/rooms/` + roomId + `/player/` + 'p1' + '/type').set('genk')
                 db.ref(`/db/rooms/` + roomId + `/player/` + 'p1' + '/hp').set(100)
                 db.ref(`/db/rooms/` + roomId + `/player/` + 'p1' + '/amo').set(100)
 
 
                 db.ref(`/db/rooms/` + roomId + `/player/` + 'p2' + '/position').set(100)
+                db.ref(`/db/rooms/` + roomId + `/player/` + 'p2' + '/direction').set('left')
+                db.ref(`/db/rooms/` + roomId + `/player/` + 'p2' + '/type').set('police')
                 db.ref(`/db/rooms/` + roomId + `/player/` + 'p2' + '/hp').set(100)
                 db.ref(`/db/rooms/` + roomId + `/player/` + 'p2' + '/amo').set(100)
 
