@@ -109,8 +109,8 @@
         reloadShootBar() {
           setTimeout(()=> {
             setInterval(() => {
-                if(this.ammoP1<10) this.ammoP1++
-                if(this.ammoP2<10) this.ammoP1++
+                if(this.ammoP1<10) this.ammoP1++;
+                if(this.ammoP2<10) this.ammoP1++;
             }, 2000)
           }, 1000);
         },
