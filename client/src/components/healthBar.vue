@@ -4,25 +4,27 @@
     <div class="player1 mt-4 mb-4">
       <h2 style="color: #fff">Player 1</h2>
       <div class="healthbars">
-       hp <canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in player1.hp/10"></canvas> {{player1.hp}}
+        <p style="color: #fff">hp</p>
+       <canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in player1.hp/10"></canvas> {{player1.hp}}
       </div>    
     </div>
     <div class="player2">
       <h2 style="color: #fff">Player 2</h2>
       <div class="healthbars">
-        {{player2.hp}}<canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in player2.hp/10"></canvas> hp
+        {{player2.hp}}<canvas class=" bar healthbar col-2" ref="healthbar" v-for="n in player2.hp/10"></canvas> <p style="color: #fff">hp</p>
       </div>    
     </div>
   </div>
     <div class="shootrow row">
       <div class="player1">  
         <div class="shootbars">
-          ammo<canvas class=" bar shootbar col-2" ref="shootbar" v-for="n in player1.amo/10"></canvas>
+          <p style="color: #fff">ammo</p>
+          <canvas class=" bar shootbar col-2" ref="shootbar" v-for="n in player1.amo/10"></canvas>
         </div>
       </div>
       <div class="player2">
         <div class="shootbars">
-          <canvas class=" bar shootbar col-2" ref="shootbar" v-for="n in player2.amo/10"></canvas>ammo
+          <canvas class=" bar shootbar col-2" ref="shootbar" v-for="n in player2.amo/10"></canvas><p style="color: #fff">ammo</p>
         </div>
       </div>
     </div>      
