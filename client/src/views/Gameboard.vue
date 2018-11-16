@@ -1,11 +1,12 @@
 <template>
   <div class="container" id="game">
     <health-bar-component :player1="players[0]" :player2="players[1]"/>
-    <div id="boardcontainer">
+
+    <div id="boardcontainer" style="background-image: url('https://00e9e64bac0c01098c4ee85ae1225b4a2ca7e03cf01a1f86ef-apidata.googleusercontent.com/download/storage/v1/b/e-commerce-storage/o/asphalt.png?qk=AD5uMEtjtL8p9V1xglLca3gdkBCMp_wAu-OwteXeS2Dhi3mCe93R5bsEQZYFdCfc7_mha-HI1bqJFPuyDvsfjzBIaooQlga9OUsltZqIGxd4ECRcJ_qMO_xGyK_vrJS38X4-AMVE1FbKaIRzZOvJb6SpE_9pysuS493tdLmepQqhJtFFlnebIlZuMJc6UifNot-rPpt6E8FXyqcfl-a3DsHd1jjJerkomgVREJwbLx0EZ0OHytBZ8N5i8U7w9eFFgG1WCXV4h0bemhpU9CtSvJauY-hjwyRH2JVDxo5HQFdI8bQmtRhieZzNxuxbpZUzHh46OJwa0bEyu3diNCZIaonklHu07qpNllzpa7yvCcmstXwQ9Aq5x2NBW7cyyQ3o9YIAdA71QVnsCL2pbNCFs-ETY3LH9rdzWqTT_xek9FgwWPOlU1netwLRKSQbBDcAHY7Nbc5E8A4CfqpJy7xOtNTwL4yiJIRTCmnyBG5NNATlITYErk6f5MB95NJRV9HqKVIHVvbRbDXsJwu2DzrRNPfzqgJY6E1e3SIUKFC7RqZdTfwHF2bqu_mAhKvhJNrxlHuygatqOoL0c4rfJhQT63NpLSQNgZMjelZ4E1FyokR-kzNtdMa69bckYHrWr0pm-cLYo-_rZlxtvgceo8eoPgIFtuTR2KhSgS6BXIL2JUMzoVi5QyyVEvBE0usUM6iqG2vJTeHkQTppDhVirEP36LZ5uGRy3Tmffq4lgmfGIpZRjPrh81LAuRZLHKRHHunG_wJDDfPFRgSO');">
         <div v-if="show" v-for="tile in tiles" :key="tile">
             <kotak :tile="tile" :players="players" :myPlayerNumber="myPlayerNumber"></kotak>
         </div>
-        <div ></div>
+
     </div>
   </div>
 </template>
@@ -55,6 +56,7 @@ export default {
               let x = previousPosition-10
               if (x > 0) {
                 db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/position').set(x)
+                db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/direction').set('up')
               }
             })
           }else if(event.key == "a" || event.key == "A"){
@@ -64,7 +66,9 @@ export default {
               let x = previousPosition-1
               if (x > 0) {
                 db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/position').set(x)
-              }            })
+                db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/direction').set('left')
+              }            
+            })
           }else if(event.key == "s" || event.key == "S"){
             db.ref(`/db/rooms/` + roomId + `/player/`+ self.myPlayerNumber).once('value', snapshot => {
               let previousPosition = snapshot.val().position
@@ -72,6 +76,7 @@ export default {
               let x = previousPosition+10
               if (x < 101) {
                 db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/position').set(x)
+                db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/direction').set('down')
               }
             })
           }else if(event.key == "d" || event.key == "D"){
@@ -81,6 +86,7 @@ export default {
               let x = previousPosition+1
               if (x < 101) {
                 db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/position').set(x)
+                db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/direction').set('right')
               }
             })
           }else if(event.key == " "){
