@@ -40,6 +40,50 @@ export default {
     created(){
         this.initGame()
     },
+    mounted(){
+      let roomId = localStorage.getItem('roomId')
+      let self = this
+      window.addEventListener('keyup', ev => {
+          if (event.key == "w" || event.key == "W") {
+            db.ref(`/db/rooms/` + roomId + `/player/`+ self.myPlayerNumber).once('value', snapshot => {
+              let previousPosition = snapshot.val().position
+              console.log(self.myPlayerNumber);
+              let x = previousPosition-10
+              if (x > 0) {
+                db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/position').set(x)
+              }
+            })
+          }else if(event.key == "a" || event.key == "A"){
+            db.ref(`/db/rooms/` + roomId + `/player/`+ self.myPlayerNumber).once('value', snapshot => {
+              let previousPosition = snapshot.val().position
+              console.log(previousPosition);
+              let x = previousPosition-1
+              if (x > 0) {
+                db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/position').set(x)
+              }            })
+          }else if(event.key == "s" || event.key == "S"){
+            db.ref(`/db/rooms/` + roomId + `/player/`+ self.myPlayerNumber).once('value', snapshot => {
+              let previousPosition = snapshot.val().position
+              console.log(previousPosition);
+              let x = previousPosition+10
+              if (x < 101) {
+                db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/position').set(x)
+              }
+            })
+          }else if(event.key == "d" || event.key == "D"){
+            db.ref(`/db/rooms/` + roomId + `/player/`+ self.myPlayerNumber).once('value', snapshot => {
+              let previousPosition = snapshot.val().position
+              console.log(previousPosition);
+              let x = previousPosition+1
+              if (x < 101) {
+                db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/position').set(x)
+              }
+            })
+          }else if(event.key == " "){
+            console.log("fire")
+          }
+        })
+    },
     watch: {
         players(){
             this.updateBoard()
@@ -55,6 +99,7 @@ export default {
                 } else if (token === snapshot.val().p2.id) {
                     this.myPlayerNumber = 'p2'
                 }
+                console.log('ini harusnya duluan', this.myPlayerNumber)
 
                 db.ref(`/db/rooms/` + roomId + `/player/` + 'p1' + '/position').set(1)
                 db.ref(`/db/rooms/` + roomId + `/player/` + 'p1' + '/hp').set(100)
@@ -79,6 +124,9 @@ export default {
                 this.show = true
             })
             // console.log('test')
+        },
+        updatePlayerPosition(){
+          
         }
     }
 }
