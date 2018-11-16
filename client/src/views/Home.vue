@@ -1,15 +1,20 @@
 <template>
-  <div class="container">
-    <div class="row">
-      <div class="mx-auto my-auto">
-        <div class="form">
-          <div class="form-group">
-            <label for="">Input Your Name</label>
-            <input type="text" v-model="nickName">
-            <div class="btn btn-primary" @click="enterGame">Enter Games</div>
+  <div class="container mt-5">
+    <div class="d-flex mt-5 justify-content-center">
+      <div class="card mt-5">
+        <div class="card-header bg-secondary">
+          <span style="color: #fff">Welcome to the game, let's have fun !!</span>
+        </div>
+        <div class="card-body">
+           <div class="">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Enter Your Name</label>
+              <input type="text" class="form-control" placeholder="Enter Your Name" v-model="nickName">
+            </div>       
+           <button class="btn btn-block btn-info" @click="enterGame">Enter The Game</button>
           </div>
         </div>
-      </div>
+    </div>     
     </div>
   </div>
 </template>
