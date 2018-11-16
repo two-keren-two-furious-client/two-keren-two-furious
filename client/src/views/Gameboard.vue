@@ -89,9 +89,59 @@ export default {
                 db.ref(`/db/rooms/` + roomId + `/player/` + self.myPlayerNumber + '/direction').set('right')
               }
             })
-          }else if(event.key == " "){
-            console.log("fire")
-          }
+          } else if(event.keyCode == 32){
+                  //get Current Player positions from DB
+                  db.ref(`/db/rooms/` + roomId + `/player`).once('value', snapshot => {
+                    //if no ammo
+                    if(snapshot.val()[attackerId].amo !== 0) {
+
+                      let attackerId= self.myPlayerNumber;
+                      let targetId;
+                      if(attackerId=='p1') {targetId='p2';}
+                      if (attackerId=='p2') {targetId='p1'};
+
+                      let attackPosition=snapshot.val()[attackerId].position;
+                      let targetPosition=snapshot.val()[targetId].position;
+                      
+                      let attackRow=Math.floor(attackPosition/10);
+                      let attackCol=attackPosition%10;
+
+                      let targetRow=Math.floor(targetPosition/10);
+                      let targetCol=targetPosition%10;
+                      
+                      let attackDirection=snapshot.val()[attackerId].direction;
+                      let hit=false;
+
+                      //check if target is in attacker line of fire
+                      let attackerAmo=snapshot.val()[attackerId].amo;
+                      let targetHp=snapshot.val()[targetId].hp;
+                      console.log(targetRow,attackRow,attackCol,targetCol,attackDirection)
+                      if(attackRow ==targetRow) {
+                        if(attackDirection=='left'){
+                          if(attackCol > targetCol) hit=true;
+                        }
+                        else if (attackDirection =='right'){
+                          if(attackCol < targetCol) hit=true;
+                        }
+                      }
+                      if(attackCol == targetCol){
+                        if(attackDirection =='up'){
+                          if(attackRow > targetRow) hit=true;
+                        }
+                        else if (attackDirection == 'down'){
+                          if(attackRow < targetRow) hit=true;
+                        }
+                      } 
+                    //update firebase daata
+                      if(hit == true){
+                        console.log('hit!!!!!!!!!!!')
+                      //if no ammo, cannot hit
+                      db.ref(`/db/rooms/` + roomId + `/player/` + targetId + '/hp').set(targethp-50)
+                      }
+                      db.ref(`/db/rooms/` + roomId + `/player/` + attackerId + '/amo').set(attackerAmo-50)
+                    }
+                  })
+                }
         })
       this.shoot()
     },
@@ -142,55 +192,7 @@ export default {
         },
      shoot() {
           //listen to key 
-          window.addEventListener("keyup", ev=>{
-            console.log('roomid')
-            let token = localStorage.getItem('token')
-            let roomId = localStorage.getItem('roomId')
-            if(ev.keyCode===32) {
-              //update firebase daata
-              let targetId;
-              let attackerId=this.myPlayerNumber;
-              console.log('attackerid',attackerId)
-              if(attackerId=='p1') targetId='p2';
-              else if (attackerId=='p2') targetId='p1';
-              db.ref(`/db/rooms/` + roomId + `/player`).once('value', snapshot => {
-                console.log('snapshot',snapshot.val())
-                let attackPosition=snapshot.val().attackerId.position;
-                let targetPosition=snapshot.val().targetId.position;
-                
-                let attackRow=Math.floor(attackPosition/10);
-                let attackCol=attackPosition%10;
-
-                let targetRow=Math.floor(targetPosition/10);
-                let targetCol=targetPosition%10;
-                
-                let attackDirection=snapshot.val().attackerId.direction;
-                let hit=false;
-                //check if target is in attacker line of fire
-
-                if(attackRow==targetRow) {
-                  if(attackDirection=='left'){
-                    if(attackCol>targetCol) hit=true;
-                  }
-                  else if (attackDirection=='right'){
-                    if(attackCol<targetCol) hit=true;
-                  }
-                }
-                if(attackCol==targetCol){
-                   if(attackDirection=='up'){
-                    if(attackRow>targetRow) hit=true;
-                  }
-                  else if (attackDirection=='down'){
-                    if(attackRow<targetRow) hit=true;
-                  }
-                } 
-                if(hit==true){
-                 db.ref(`/db/rooms/` + roomId + `/player/` + targetId + '/hp').set(50)
-                }
-                db.ref(`/db/rooms/` + roomId + `/player/` + attackerId + '/amo').set(50)
-              })
-            }
-          })
+        
         }
     }
 }
