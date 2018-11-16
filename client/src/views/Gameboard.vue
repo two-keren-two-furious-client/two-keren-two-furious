@@ -151,7 +151,6 @@ export default {
                         console.log('hit!!!!!!!!!!!')
                         //if no ammo, cannot hit
                         db.ref(`/db/rooms/` + roomId + `/player/` + targetId + '/hp').set(targetHp-50);
-                        this.isDead(this.players)
                       }
                       console.log('attacker.........',attackerAmo)
 
@@ -165,18 +164,22 @@ export default {
     },
     watch: {
         players(){
-            this.updateBoard()
+            this.updateBoard();
+            this.isDead(this.players);
         }
     },
     methods: {
         isDead(target) {
+          console.log('---',target)
           let self=this;
+          let player1=target[0].name;
+          let player2=target[1].name;
           target.forEach(player => { 
             if(player.hp==0) {
               self.dead=true;
-              self.winner=player.name;
+              if(player==target[0]) self.winner=player2;
+              else self.winner=player1;
             }
-
           })
         },
         reloadShootBar(roomId, attackerId) {
