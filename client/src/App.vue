@@ -2,17 +2,12 @@
   <div id="app">
     <div id="nav">
     </div>
-    <health-bar/>
     <router-view></router-view>
   </div>
 </template>
 <script>
-  import healthBarComponent from './components/healthBar.vue'
   export default {
     name: 'App',
-    components: {
-    'health-bar': healthBarComponent
-    }
   }
 </script>
 <style>
